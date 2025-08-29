@@ -13,3 +13,9 @@ def send_payment_confirmation(email, booking_id):
     subject = "Payment Successful"
     message = f"Your payment for booking {booking_id} has been successfully completed."
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+
+@shared_task
+def send_booking_confirmation_email(user_email, booking_id, listing_name):
+    subject = "Booking Confirmation"
+    message = f"Your booking #{booking_id} for {listing_name} has been confirmed!"
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
