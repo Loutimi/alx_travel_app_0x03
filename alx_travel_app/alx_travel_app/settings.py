@@ -141,13 +141,14 @@ CHAPA_SECRET_KEY = env("CHAPA_SECRET_KEY")
 
 # Email config
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # for dev/testing
-DEFAULT_FROM_EMAIL = 'no-reply@yourdomain.com'
+DEFAULT_FROM_EMAIL = 'no-reply@airbnbclone.com'
 
 
 # Celery settings
-CELERY_BROKER_URL = "redis://localhost:6379/0"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
-CELERY_ACCEPT_CONTENT = ["json"]
-CELERY_TASK_SERIALIZER = "json"
-CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = "UTC"
+RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
+RABBITMQ_PASS = os.environ.get("RABBITMQ_PASS", "guest")
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
+RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT", "5672")
+
+CELERY_BROKER_URL = f"amqp://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}//"
+CELERY_RESULT_BACKEND = "rpc://"
