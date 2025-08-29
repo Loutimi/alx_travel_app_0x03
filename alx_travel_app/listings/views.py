@@ -7,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .tasks import send_payment_email, send_confirmation_email
+from .tasks import send_payment_email, send_payment_confirmation, send_booking_confirmation_email
 
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -28,7 +28,13 @@ class BookingViewSet(viewsets.ModelViewSet):
         return Booking.objects.none()  # Anonymous users see nothing
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        booking = serializer.save()  # serializer handles the user assignment
+        # Trigger booking confirmation email
+        send_booking_confirmation_email.delay(
+            booking.user.email,
+            str(booking.booking_id),
+            booking.listing.name
+        )
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -52,7 +58,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 class InitiatePaymentView(APIView):
     def post(self, request, booking_id):
         try:
-            booking = Booking.objects.get(id=booking_id, user=request.user)
+            booking = Booking.objects.get(booking_id=booking_id, user=request.user)
         except Booking.DoesNotExist:
             return Response({"error": "Booking not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -69,7 +75,7 @@ class InitiatePaymentView(APIView):
             "callback_url": f"http://localhost:8000/api/payments/verify/{tx_ref}/",
             "return_url": "http://localhost:8000/api/payments/success/",
             "customization": {
-                "title": f"Payment for Booking {booking.id}",
+                "title": f"Payment for Booking {booking.booking_id}",
                 "description": f"Payment for {booking.listing.name}"
             }
         }
@@ -123,7 +129,7 @@ class VerifyPaymentView(APIView):
             payment.save()
 
             # Send confirmation email asynchronously
-            send_confirmation_email.delay(payment.user.email, payment.amount)
+            send_payment_confirmation.delay(payment.user.email, payment.amount)
 
             return Response({"message": "Payment successful and confirmed."}, status=status.HTTP_200_OK)
 
