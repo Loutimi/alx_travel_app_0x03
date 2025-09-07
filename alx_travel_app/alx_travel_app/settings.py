@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 ]
 
-# Only add staticfiles if not in production
+# To only add staticfiles if not in production
 if not os.environ.get('RENDER'):
     INSTALLED_APPS.append('django.contrib.staticfiles')
 
@@ -139,8 +139,11 @@ STATIC_ROOT = '/tmp/staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Swagger settings - disable authentication
 SWAGGER_SETTINGS = {
-    "DEFAULT_INFO": "listings.swagger.api_info"
+    "DEFAULT_INFO": "listings.swagger.api_info",
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': None,
 }
 
 CHAPA_SECRET_KEY = env("CHAPA_SECRET_KEY")
