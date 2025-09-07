@@ -1,15 +1,17 @@
 app = "alx-travel-app"
+primary_region = "lax"
 
 [build]
-  builder = "paketobuildpacks/builder:base"
 
 [env]
   DJANGO_SETTINGS_MODULE = "alx_travel_app.settings"
-  DEBUG = "false"
 
 [processes]
-  worker = "celery -A alx_travel_app worker --loglevel=info"
+  web = "gunicorn alx_travel_app.wsgi --log-file -"
+  worker = "celery -A alx_travel_app worker --loglevel=INFO"
+  beat = "celery -A alx_travel_app beat --loglevel=INFO"
 
-[[services]]
-  internal_port = 8000
-  protocol = "tcp"
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
