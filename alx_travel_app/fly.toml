@@ -1,4 +1,4 @@
-app = "alx-travel-app"
+app = "alx-celery-worker"
 primary_region = "lax"
 
 [build]
@@ -7,9 +7,8 @@ primary_region = "lax"
   DJANGO_SETTINGS_MODULE = "alx_travel_app.settings"
 
 [processes]
-  web = "gunicorn alx_travel_app.wsgi --log-file -"
   worker = "celery -A alx_travel_app worker --loglevel=INFO"
-  beat = "celery -A alx_travel_app beat --loglevel=INFO"
+  beat   = "celery -A alx_travel_app beat --loglevel=INFO"
 
 [[vm]]
   memory = "1gb"
