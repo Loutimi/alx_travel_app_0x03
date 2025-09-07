@@ -1,6 +1,4 @@
-# fly.toml for Celery worker
-
-app = "alx-celery-worker"
+app = "alx-travel-app"
 primary_region = "lax"
 
 [build]
