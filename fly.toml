@@ -1,0 +1,17 @@
+# fly.toml for Celery worker
+
+app = "alx-celery-worker"
+primary_region = "lax"
+
+[build]
+
+[env]
+  DJANGO_SETTINGS_MODULE = "alx_travel_app.settings"
+
+[processes]
+  worker = "celery -A alx_travel_app worker --loglevel=INFO"
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
