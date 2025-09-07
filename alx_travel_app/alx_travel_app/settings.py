@@ -146,5 +146,5 @@ DEFAULT_FROM_EMAIL = 'no-reply@airbnbclone.com'
 
 
 # Celery settings (using CloudAMQP or any AMQP broker)
-CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="amqp://guest:guest@localhost:5672//")
+CELERY_BROKER_URL = env("CLOUDAMQP_URL", default="amqp://guest:guest@localhost:5672//")
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="rpc://")
