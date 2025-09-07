@@ -43,16 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.staticfiles'
     'django.contrib.messages',
     'listings',
     'rest_framework',
     'corsheaders',
     'drf_yasg',
 ]
-
-# To only add staticfiles if not in production
-if not os.environ.get('RENDER'):
-    INSTALLED_APPS.append('django.contrib.staticfiles')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -133,18 +130,18 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = '/tmp/staticfiles'
 
+# Swagger to use CDN instead of local files
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {},
+    'USE_SESSION_AUTH': False,
+    'SWAGGER_UI_DIST': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.52.5',
+    'SWAGGER_UI_FAVICON_HREF': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.52.5/favicon-32x32.png',
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Swagger settings - disable authentication
-SWAGGER_SETTINGS = {
-    "DEFAULT_INFO": "listings.swagger.api_info",
-    'USE_SESSION_AUTH': False,
-    'SECURITY_DEFINITIONS': None,
-}
 
 CHAPA_SECRET_KEY = env("CHAPA_SECRET_KEY")
 
