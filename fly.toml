@@ -9,7 +9,7 @@ primary_region = "lax"
   DJANGO_SETTINGS_MODULE = "alx_travel_app.settings"
 
 [processes]
-  worker = "celery -A alx_travel_app.celery worker --loglevel=INFO"
+  worker = "celery -A alx_travel_app worker --loglevel=INFO"
 
 [[vm]]
   memory = "1gb"
