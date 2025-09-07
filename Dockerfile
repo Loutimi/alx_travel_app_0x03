@@ -3,8 +3,8 @@ ARG PYTHON_VERSION=3.10-slim
 FROM python:${PYTHON_VERSION}
 
 ENV PYTHONPATH=/code
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # install psycopg2 dependencies.
 RUN apt-get update && apt-get install -y \
@@ -21,7 +21,7 @@ RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /root/.cache/
-COPY . /code
+COPY alx_travel_app /code
 
 EXPOSE 8000
 
