@@ -144,11 +144,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # for dev/test
 DEFAULT_FROM_EMAIL = 'no-reply@airbnbclone.com'
 
 
-# Celery settings
-RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
-RABBITMQ_PASS = os.environ.get("RABBITMQ_PASS", "guest")
-RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
-RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT", "5672")
-
-CELERY_BROKER_URL = f"amqp://{RABBITMQ_USER}:{RABBITMQ_PASS}@{RABBITMQ_HOST}:{RABBITMQ_PORT}//"
-CELERY_RESULT_BACKEND = "rpc://"
+# Celery settings (using CloudAMQP or any AMQP broker)
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="amqp://guest:guest@localhost:5672//")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="rpc://")
